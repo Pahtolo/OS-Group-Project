@@ -1,6 +1,7 @@
 import shlex
 import subprocess
 import shutil
+import os
 
 def annotate_trace(trace_output: str):
     lines = trace_output.splitlines()
@@ -23,24 +24,49 @@ def annotate_trace(trace_output: str):
 
 
 def trace_command(cmd_line: str):
-    try:
-        args = shlex.split(cmd_line)
-        if not args:
+    args = shlex.split(cmd_line)
+    
+    #If user input is empty, try again
+    if not args:
             return
+            
+    #Try check for specific builtins (cd, pwd) 
+    try:
+        if args[0].lower() == "cd":
+            os.chdir(args[1]) 
+            return 
+        if args[0].lower() == "pwd":
+            print(os.getcwd())
+            return
+    
+    #Catch exception if user input is not a valid command
+    except FileNotFoundError as e:
+        print(f"Invalid directory: {args[1]}")
+        return
+        
+    #Try check for executables
+    try:
+        
+        #Checks each directory in $PATH. Returns the full path of the first match if found. 
+        #If user input is not a valid executable, returns None
         if shutil.which(args[0]) is None:
-            print(f"invalid command: {args[0]}")
+            print(f"Invalid command: {args[0]}")
             return
         full_cmd = ["strace", "-f", "-tt", "-T"] + args
 
+
+        #Store strace output
         result = subprocess.run(
             full_cmd,
             text=True,
             capture_output=True
         )
-
+        
+        #Print normal output
         print("=== STDOUT ===")
         print(result.stdout)
 
+        #Print strace output
         print("=== SYSCALL TRACE ===")
         annotated = annotate_trace(result.stderr)
         print(annotated)
@@ -49,6 +75,7 @@ def trace_command(cmd_line: str):
 
 def main():
     print("Trace Shell (Linux): Enter 'quit' or 'exit' to exit the program.")
+    print("For a list of supported builtins, enter 'help'.")
     while True:
         cmd = input("trace> ")
         if cmd.lower() in ("exit", "quit"):
