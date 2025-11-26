@@ -48,7 +48,7 @@ def trace_command(cmd_line: str):
         print(f"invalid command: {e.filename}")
 
 def main():
-    print("Trace Shell (Linux)")
+    print("Trace Shell (Linux): Enter 'quit' or 'exit' to exit the program.")
     while True:
         cmd = input("trace> ")
         if cmd.lower() in ("exit", "quit"):
