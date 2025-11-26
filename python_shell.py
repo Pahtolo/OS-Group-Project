@@ -1,5 +1,6 @@
 import shlex
 import subprocess
+import shutil
 
 def annotate_trace(trace_output: str):
     lines = trace_output.splitlines()
@@ -22,21 +23,29 @@ def annotate_trace(trace_output: str):
 
 
 def trace_command(cmd_line: str):
-    args = shlex.split(cmd_line)
-    full_cmd = ["strace", "-f", "-tt", "-T"] + args
+    try:
+        args = shlex.split(cmd_line)
+        if not args:
+            return
+        if shutil.which(args[0]) is None:
+            print(f"invalid command: {args[0]}")
+            return
+        full_cmd = ["strace", "-f", "-tt", "-T"] + args
 
-    result = subprocess.run(
-        full_cmd,
-        text=True,
-        capture_output=True
-    )
+        result = subprocess.run(
+            full_cmd,
+            text=True,
+            capture_output=True
+        )
 
-    print("=== STDOUT ===")
-    print(result.stdout)
+        print("=== STDOUT ===")
+        print(result.stdout)
 
-    print("=== SYSCALL TRACE ===")
-    annotated = annotate_trace(result.stderr)
-    print(annotated)
+        print("=== SYSCALL TRACE ===")
+        annotated = annotate_trace(result.stderr)
+        print(annotated)
+    except FileNotFoundError as e:
+        print(f"invalid command: {e.filename}")
 
 def main():
     print("Trace Shell (Linux)")
