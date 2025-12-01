@@ -42,7 +42,26 @@ def trace_command(cmd_line: str):
         if args[0].lower() == "pwd":
             print(os.getcwd())
             return
-    
+        if args[0].lower() == "cat":
+                if len(args) < 2:
+                    print("Usage: cat <file>")
+                    return
+                try:
+                    with open(args[1], "r") as f:
+                            print(f.read())
+                except FileNotFoundError:
+                    print(f"File not found: {args[1]}")
+                return
+        if args[0].lower() == "cp":
+            if len(args) < 3:
+                print("Usage: cp <src> <dst>")
+                return
+            try:
+                shutil.copy(args[1], args[2])
+                print(f"Copied {args[1]} -> {args[2]}")
+            except FileNotFoundError:
+                print(f"File not found: {args[1]}")
+            return
     #Catch exception if user input is not a valid command
     except FileNotFoundError as e:
         print(f"Invalid directory: {args[1]}")
