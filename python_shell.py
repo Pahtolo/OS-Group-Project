@@ -3,6 +3,10 @@ import subprocess
 import shutil
 import os
 
+##Finish help menu
+def help_menu():
+    
+
 def annotate_trace(trace_output: str):
     lines = trace_output.splitlines()
     annotated = []
@@ -30,7 +34,7 @@ def trace_command(cmd_line: str):
     if not args:
             return
             
-    #Try check for specific builtins (cd, pwd) 
+    #Try check for specific builtins (cd, pwd). //ADD ANY ADDITIONAL COMMANDS HERE// 
     try:
         if args[0].lower() == "cd":
             os.chdir(args[1]) 
@@ -48,7 +52,7 @@ def trace_command(cmd_line: str):
     try:
         
         #Checks each directory in $PATH. Returns the full path of the first match if found. 
-        #If user input is not a valid executable, returns None
+        #If user input is not a valid executable, returns None and prints the invalid command
         if shutil.which(args[0]) is None:
             print(f"Invalid command: {args[0]}")
             return
@@ -80,7 +84,11 @@ def main():
         cmd = input("trace> ")
         if cmd.lower() in ("exit", "quit"):
             break
+        if cmd.lower() in ("help"):
+            help_menu() #needs finishing 
+            continue()
         trace_command(cmd)
+        
 
 if __name__ == "__main__":
     main()
