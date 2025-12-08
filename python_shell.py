@@ -3,9 +3,14 @@ import subprocess
 import shutil
 import os
 
+
 ##Finish help menu
 def help_menu():
-    
+    print("cd <directory>\t-\t Changes the current working directory to <directory>")
+    print("pwd\t-\t Prints the current working directory")
+    print("cat <file>\t-\t Prints the contents of text file <file>")
+    print("cp <src> <dst>\t-\t Copies <src> to <dst>")
+    print("exit or quit\t-\t Exits the program")
 
 def annotate_trace(trace_output: str):
     lines = trace_output.splitlines()
@@ -37,7 +42,17 @@ def trace_command(cmd_line: str):
     #Try check for specific builtins (cd, pwd). //ADD ANY ADDITIONAL COMMANDS HERE// 
     try:
         if args[0].lower() == "cd":
-            os.chdir(args[1]) 
+            try:
+                before = os.getcwd()
+                os.chdir(args[1])
+                after = os.getcwd()
+                if before == after: # If before == after, then directory didn't change
+                    print(f"No directory {args[1]} exists")
+                else:
+                    print(f"Changed directory to {args[1]}")
+            except IndexError:
+                print("Usage: cd <directory>")
+
             return 
         if args[0].lower() == "pwd":
             print(os.getcwd())
@@ -104,8 +119,8 @@ def main():
         if cmd.lower() in ("exit", "quit"):
             break
         if cmd.lower() in ("help"):
-            help_menu() #needs finishing 
-            continue()
+            help_menu()
+            continue
         trace_command(cmd)
         
 
