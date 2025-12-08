@@ -7,7 +7,9 @@ import os
 ##Finish help menu
 def help_menu():
     print("cd <directory>\t-\t Changes the current working directory to <directory>")
+    print("ls\t-\t Prints the current working directory contents")
     print("pwd\t-\t Prints the current working directory")
+    print("mv <src> <dst>\t-\t Moves <src> to <dst>")
     print("cat <file>\t-\t Prints the contents of text file <file>")
     print("cp <src> <dst>\t-\t Copies <src> to <dst>")
 
@@ -51,6 +53,9 @@ def trace_command(cmd_line: str):
                 print("Usage: cd <directory>")
 
             return
+        if args[0].lower() == "ls":
+            print("Current directory contents:")
+            print(os.listdir(os.getcwd()))
         if args[0].lower() == "pwd":
             print("Current working directory: ", os.getcwd())
             return
