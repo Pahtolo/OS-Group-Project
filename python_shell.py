@@ -10,6 +10,8 @@ def help_menu():
     print("pwd\t-\t Prints the current working directory")
     print("cat <file>\t-\t Prints the contents of text file <file>")
     print("cp <src> <dst>\t-\t Copies <src> to <dst>")
+
+
     print("exit or quit\t-\t Exits the program")
 
 def annotate_trace(trace_output: str):
@@ -43,19 +45,14 @@ def trace_command(cmd_line: str):
     try:
         if args[0].lower() == "cd":
             try:
-                before = os.getcwd()
                 os.chdir(args[1])
-                after = os.getcwd()
-                if before == after: # If before == after, then directory didn't change
-                    print(f"No directory {args[1]} exists")
-                else:
-                    print(f"Changed directory to {args[1]}")
+                print(f"Changed directory to: {args[1]}")
             except IndexError:
                 print("Usage: cd <directory>")
 
-            return 
+            return
         if args[0].lower() == "pwd":
-            print(os.getcwd())
+            print("Current working directory: ", os.getcwd())
             return
         if args[0].lower() == "cat":
                 if len(args) < 2:
@@ -84,8 +81,8 @@ def trace_command(cmd_line: str):
         
     #Try check for executables
     try:
-        
-        #Checks each directory in $PATH. Returns the full path of the first match if found. 
+
+        #Checks each directory in $PATH. Returns the full path of the first match if found.
         #If user input is not a valid executable, returns None and prints the invalid command
         if shutil.which(args[0]) is None:
             print(f"Invalid command: {args[0]}")
@@ -99,7 +96,7 @@ def trace_command(cmd_line: str):
             text=True,
             capture_output=True
         )
-        
+
         #Print normal output
         print("=== STDOUT ===")
         print(result.stdout)
