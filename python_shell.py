@@ -54,6 +54,19 @@ def trace_command(cmd_line: str):
         if args[0].lower() == "pwd":
             print("Current working directory: ", os.getcwd())
             return
+        if args[0].lower() == "mv":
+            if len(args) < 3:
+                print("Usage: mv <src> <dst>")
+                return
+            try:
+                if os.path.exists(args[2]):
+                    shutil.move(args[1], args[2])
+                    print(f"Moved {args[1]} -> {args[2]}")
+                else:
+                    print(f"No such directory: {args[2]}")
+            except FileNotFoundError:
+                print(f"File not found: {args[1]}")
+            return
         if args[0].lower() == "cat":
                 if len(args) < 2:
                     print("Usage: cat <file>")
@@ -74,6 +87,7 @@ def trace_command(cmd_line: str):
             except FileNotFoundError:
                 print(f"File not found: {args[1]}")
             return
+
     #Catch exception if user input is not a valid command
     except FileNotFoundError:
         print(f"Invalid directory: {args[1]}")
