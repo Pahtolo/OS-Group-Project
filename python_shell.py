@@ -75,7 +75,7 @@ def trace_command(cmd_line: str):
                 print(f"File not found: {args[1]}")
             return
     #Catch exception if user input is not a valid command
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         print(f"Invalid directory: {args[1]}")
         return
         
@@ -106,7 +106,7 @@ def trace_command(cmd_line: str):
         annotated = annotate_trace(result.stderr)
         print(annotated)
     except FileNotFoundError as e:
-        print(f"invalid command: {e.filename}")
+        print(f"Invalid command: {e.filename}")
 
 def main():
     print("Trace Shell (Linux): Enter 'quit' or 'exit' to exit the program.")
@@ -115,7 +115,7 @@ def main():
         cmd = input("trace> ")
         if cmd.lower() in ("exit", "quit"):
             break
-        if cmd.lower() in ("help"):
+        if cmd.lower() in "help":
             help_menu()
             continue
         trace_command(cmd)
