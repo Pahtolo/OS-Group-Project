@@ -179,6 +179,8 @@ def main():
     print("For a list of supported builtins, enter 'help'.")
     while True:
         cmd = input("trace> ")
+        if len(cmd) == 0:
+            continue
         if cmd.lower() in ("exit", "quit"):
             break
         if cmd.lower() in "help":
