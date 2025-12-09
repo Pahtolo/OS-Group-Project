@@ -6,14 +6,17 @@ import os
 
 ##Finish help menu
 def help_menu():
-    print("cd <directory>\t-\t Changes the current working directory to <directory>")
-    print("ls\t-\t Prints the current working directory contents")
-    print("pwd\t-\t Prints the current working directory")
-    print("mkdir\t-\t Creates the directory <directory>")
-    print("rmdir\t-\t Removes the directory <directory> only if it is empty")
-    print("mv <src> <dst>\t-\t Moves <src> to <dst>")
-    print("cat <file>\t-\t Prints the contents of text file <file>")
-    print("cp <src> <dst>\t-\t Copies <src> to <dst>")
+    print("cd <directory>\t-\tChanges the current working directory to <directory> ('..' moves backwards)")
+    print("ls\t-\tPrints the contents of the current working directory")
+    print("pwd\t-\tPrints the current working directory")
+    print("mkdir\t-\tCreates <directory>")
+    print("rmdir\t-\tRemoves <directory> only if it is empty")
+    print("mv <src> <dst>\t-\tMoves <src> to <dst>")
+    print("cat <file>\t-\tPrints the contents of <file>")
+    print("touch <file>\t-\tCreates <file>, if it already exists, then update its date modified")
+    print("cp <src> <dst>\t-\tCopies <src> to <dst>")
+    print("mk <file>\t-\tCreates <file> only if it does not already exist")
+    print("rm <file>\t-\tRemoves <file>")
 
     print("help\t-\t Prints this list of available commands")
     print("exit or quit\t-\t Exits the program")
@@ -123,6 +126,18 @@ def trace_command(cmd_line: str):
                 print(f"File not found: {args[1]}")
 
             return
+        if args[0].lower() == "touch":
+            if len(args) < 2:
+                print("Usage: touch <file>")
+                return
+            if not os.path.exists(args[1]):
+                with open(args[1], "x"):
+                    os.utime(args[1], None)
+                    print(f"{args[1]} created")
+                return
+            os.utime(args[1], None)
+            print(f"Touched: {args[1]}")
+            return
         if args[0].lower() == "cp":
             if len(args) < 3:
                 print("Usage: cp <src> <dst>")
@@ -139,6 +154,26 @@ def trace_command(cmd_line: str):
             shutil.copy(args[1], args[2])
             print(f"Copied {args[1]} -> {args[2]}")
             return
+        if args[0].lower() == "mk":
+            if len(args) < 2:
+                print("Usage: mk <file>")
+                return
+            if os.path.exists(args[1]):
+                print(f"File already exists: {args[1]}")
+                return
+            open(args[1], "x").close()
+            print(f"Created file: {args[1]}")
+            return
+        if args[0].lower() == "rm":
+            if len(args) < 2:
+                print("Usage: rm <file>")
+                return
+            if not os.path.exists(args[1]):
+                print(f"File does not exist: {args[1]}")
+                return
+            os.remove(args[1])
+            print(f"File removed: {args[1]}")
+
 
     #Catch exception if user input is not a valid command
     except FileNotFoundError:
