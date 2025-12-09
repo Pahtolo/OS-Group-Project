@@ -6,6 +6,7 @@ import os
 
 ##Finish help menu
 def help_menu():
+    print()
     print("cd <directory>\t-\tChanges the current working directory to <directory> ('..' moves backwards)")
     print("ls\t-\tPrints the contents of the current working directory")
     print("pwd\t-\tPrints the current working directory")
@@ -18,8 +19,9 @@ def help_menu():
     print("mk <file>\t-\tCreates <file> only if it does not already exist")
     print("rm <file>\t-\tRemoves <file>")
 
-    print("help\t-\t Prints this list of available commands")
-    print("exit or quit\t-\t Exits the program")
+    print("help\t-\tPrints this list of available commands")
+    print("exit or quit\t-\tExits the program")
+    print()
 
 def annotate_trace(trace_output: str):
     lines = trace_output.splitlines()
@@ -216,11 +218,11 @@ def main():
         cmd = input("trace> ")
         if len(cmd) == 0:
             continue
-        if cmd.lower() in ("exit", "quit"):
-            break
         if cmd.lower() in "help":
             help_menu()
             continue
+        if cmd.lower() in ("exit", "quit"):
+            break
         trace_command(cmd)
         
 
