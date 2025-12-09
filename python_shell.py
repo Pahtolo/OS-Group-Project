@@ -15,7 +15,7 @@ def help_menu():
     print("cat <file>\t-\t Prints the contents of text file <file>")
     print("cp <src> <dst>\t-\t Copies <src> to <dst>")
 
-
+    print("help\t-\t Prints this list of available commands")
     print("exit or quit\t-\t Exits the program")
 
 def annotate_trace(trace_output: str):
